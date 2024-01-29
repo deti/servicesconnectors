@@ -1,3 +1,4 @@
+import pytest
 import respx
 from faker import Faker
 from fastapi.testclient import TestClient
@@ -24,6 +25,27 @@ def test_build_appstore_url():
     url = build_appstore_url(item)
 
     assert expected_url == url
+
+
+@pytest.mark.parametrize(
+    "parameter",
+    [
+        pytest.param("region", id="region"),
+        pytest.param("slug", id="slug"),
+        pytest.param("appid", id="appid"),
+        pytest.param("description", id="description"),
+    ],
+)
+def test_create_appstore_missing_parameter_returns_422(
+    client: TestClient, parameter: str
+):
+    item = fake_appstore_item()
+    as_dict = item.dict()
+    as_dict[parameter] = None
+
+    response = client.post("/connectors/appstore", json=as_dict)
+
+    assert response.status_code == 422
 
 
 @respx.mock
