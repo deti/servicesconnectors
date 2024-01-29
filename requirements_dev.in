@@ -7,3 +7,5 @@ black
 mypy
 flake8
 pylint
+respx
+faker
