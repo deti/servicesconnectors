@@ -1,0 +1,9 @@
+-r requirements.in
+pip-tools
+pytest
+pytest-cov
+isort
+black
+mypy
+flake8
+pylint
