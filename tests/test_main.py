@@ -1,4 +1,9 @@
-from src.main import simple_sum
+""" Test the main.py module """
 
-def test_simple_sum():
-    assert simple_sum(1, 2) == 3
+from fastapi.testclient import TestClient
+
+
+def test_main(client: TestClient):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello World"}

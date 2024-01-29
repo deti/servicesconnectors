@@ -1,8 +1,11 @@
-""" Main module. """
-def simple_sum(a: int, b: int) -> int:
-    """ Simple sum function """
-    return a + b
+""" Main for connector application. """
+
+from fastapi import FastAPI
+
+app = FastAPI()
 
 
-if __name__ == "__main__":
-    print(f"Simple sum {simple_sum(1, 2)}")
+@app.get("/")
+async def root():
+    """Root endpoint for testing purposes"""
+    return {"message": "Hello World"}

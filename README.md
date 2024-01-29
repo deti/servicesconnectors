@@ -12,6 +12,9 @@ Will configure project for local run and development.
 ./run_server.sh
 ```
 
+## API documentation
+API documentation is available at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
 ## Run tests
 ```bash
 ./test.sh

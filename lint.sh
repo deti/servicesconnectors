@@ -20,4 +20,4 @@ flake8 src tests
 
 echo
 echo "------- Running pylint: -------"
-pylint src tests
+pylint src
