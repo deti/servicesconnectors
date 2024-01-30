@@ -40,7 +40,7 @@ def test_create_appstore_missing_parameter_returns_422(
     client: TestClient, parameter: str
 ):
     item = fake_appstore_item()
-    as_dict = item.dict()
+    as_dict = item.model_dump()
     as_dict[parameter] = None
 
     response = client.post("/connectors/appstore", json=as_dict)
@@ -49,31 +49,31 @@ def test_create_appstore_missing_parameter_returns_422(
 
 
 @respx.mock
+def test_create_appstore_returns_404_if_not_found(client: TestClient):
+    item = fake_appstore_item()
+
+    app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(404))
+
+    response = client.post("/connectors/appstore", json=item.model_dump())
+    assert app_route.called
+
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "Resource not found",
+    }
+
+
+@respx.mock
 def test_create_appstore_connector(client: TestClient):
     item = fake_appstore_item()
 
     app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(200))
 
-    response = client.post("/connectors/appstore", json=item.dict())
+    response = client.post("/connectors/appstore", json=item.model_dump())
     assert app_route.called
 
     assert response.status_code == 200
     assert response.json() == {
         "connector_type": "appstore",
         "message": f"Created '{item.description}'",
-    }
-
-
-@respx.mock
-def test_create_appstore_returns_404_if_not_found(client: TestClient):
-    item = fake_appstore_item()
-
-    app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(404))
-
-    response = client.post("/connectors/appstore", json=item.dict())
-    assert app_route.called
-
-    assert response.status_code == 404
-    assert response.json() == {
-        "detail": "Resource not found",
     }
