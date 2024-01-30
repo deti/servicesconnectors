@@ -49,8 +49,6 @@ async def read_appstore_connector(uuid: str, db: Session = Depends(get_db)):
     storage = Storage()
     item = storage.read(uuid)
     if item is None:
-        raise HTTPException(
-            status_code=status.HTTP_204_NO_CONTENT, detail="Connector not fetched yet"
-        )
+        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
 
     return item
