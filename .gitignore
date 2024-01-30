@@ -161,4 +161,4 @@ cython_debug/
 
 # Application files
 *.sqlite3
-
+storage/

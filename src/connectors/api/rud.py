@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.connectors.models import (delete_connector_from_db,
                                    get_all_connectors, get_connector)
+from src.connectors.runner import connector_runner
 from src.connectors.storage import Storage
 from src.dependencies import get_db
 
@@ -76,3 +77,6 @@ async def update_connector_data(uuid: str, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Connector not found"
         )
+
+    connector_runner(connector)
+    return {"message": f"Updated {connector.uuid}"}

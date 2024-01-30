@@ -9,3 +9,4 @@ flake8
 pylint
 respx
 faker
+types-beautifulsoup4

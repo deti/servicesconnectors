@@ -3,3 +3,5 @@ uvicorn==0.*
 httpx==0.*
 sqlalchemy==2.*
 alembic==1.*
+beautifulsoup4==4.*
+dataclasses-json==0.*

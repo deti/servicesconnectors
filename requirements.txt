@@ -12,12 +12,16 @@ anyio==4.2.0
     # via
     #   httpx
     #   starlette
+beautifulsoup4==4.12.3
+    # via -r requirements.in
 certifi==2023.11.17
     # via
     #   httpcore
     #   httpx
 click==8.1.7
     # via uvicorn
+dataclasses-json==0.6.3
+    # via -r requirements.in
 fastapi==0.109.0
     # via -r requirements.in
 greenlet==3.0.3
@@ -34,10 +38,16 @@ idna==3.6
     # via
     #   anyio
     #   httpx
-mako==1.3.0
+mako==1.3.2
     # via alembic
 markupsafe==2.1.4
     # via mako
+marshmallow==3.20.2
+    # via dataclasses-json
+mypy-extensions==1.0.0
+    # via typing-inspect
+packaging==23.2
+    # via marshmallow
 pydantic==2.6.0
     # via fastapi
 pydantic-core==2.16.1
@@ -46,6 +56,8 @@ sniffio==1.3.0
     # via
     #   anyio
     #   httpx
+soupsieve==2.5
+    # via beautifulsoup4
 sqlalchemy==2.0.25
     # via
     #   -r requirements.in
@@ -59,5 +71,8 @@ typing-extensions==4.9.0
     #   pydantic
     #   pydantic-core
     #   sqlalchemy
+    #   typing-inspect
+typing-inspect==0.9.0
+    # via dataclasses-json
 uvicorn==0.27.0.post1
     # via -r requirements.in
