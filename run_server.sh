@@ -2,4 +2,8 @@
 
 source .venv/bin/activate
 
- python -m uvicorn src.main:app --reload
+# Upgrade the database
+python -m alembic upgrade head
+
+# Run the server
+python -m uvicorn src.main:app --reload

@@ -1,3 +1,5 @@
 fastapi==0.*
 uvicorn==0.*
 httpx==0.*
+sqlalchemy==2.*
+alembic==1.*

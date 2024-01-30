@@ -40,3 +40,15 @@ Edit `requirements.in`  and `requirements-dev.in` files and run:
 ```bash
 ./update_dependencies.sh
 ```
+
+## Generate migration
+Generate migration file with:
+```bash
+ python -m alembic revision --autogenerate -m "Migration message"
+```
+
+## Apply migrations
+Applying migratins is part of `run_server.sh` script, but you can also run it manually:
+```bash
+ python -m alembic upgrade head
+```
