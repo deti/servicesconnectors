@@ -1,8 +1,8 @@
 """Added connectors table
 
-Revision ID: d13f17179358
+Revision ID: d2e0827ca043
 Revises:
-Create Date: 2024-01-30 12:03:38.664430
+Create Date: 2024-01-30 12:50:15.437795
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "d13f17179358"
+revision: str = "d2e0827ca043"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None

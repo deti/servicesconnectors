@@ -1,10 +1,16 @@
 """ Connector model and functions """
 
+import json
+from typing import List, Optional
+
 from sqlalchemy import Column, DateTime, String, Text
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 
-Base = declarative_base()
+from src.database import Base
+
+from .schemas import ConnectorCreate
+from .utils import generate_uuid_from_dict
 
 
 class Connector(Base):  # type: ignore
@@ -24,3 +30,41 @@ class Connector(Base):  # type: ignore
         server_default=func.now(),  # pylint: disable=not-callable
         onupdate=func.now(),  # pylint: disable=not-callable
     )
+
+
+def get_connector(db: Session, connector_uuid: str) -> Optional[Connector]:
+    """Get a connector by uuid from Database"""
+    return db.query(Connector).filter(Connector.uuid == connector_uuid).first()
+
+
+def all_connectors_uuids(db: Session) -> List[str]:
+    """Get all connectors uuids from Database"""
+    return [uuid for uuid, in db.query(Connector.uuid).all()]
+
+
+def create_connector(
+    db: Session, connector_info: ConnectorCreate, connector_uuid: Optional[str] = None
+) -> Connector:
+    """Create a connector in Database"""
+    if connector_uuid is None:
+        connector_uuid = generate_uuid_from_dict(connector_info.connector_settings)
+
+    connector = Connector(
+        uuid=connector_uuid,
+        connector_type=connector_info.connector_type,
+        connector_settings=json.dumps(connector_info.connector_settings),
+        description=connector_info.description,
+    )
+    db.add(connector)
+    db.commit()
+    db.refresh(connector)
+    return connector
+
+
+def get_or_create_connector(db: Session, connector_info: ConnectorCreate) -> Connector:
+    """Get or create a connector in Database"""
+    item_uuid = generate_uuid_from_dict(connector_info.connector_settings)
+    connector = get_connector(db, item_uuid)
+    if connector:
+        return connector
+    return create_connector(db, connector_info, item_uuid)
