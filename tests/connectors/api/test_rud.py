@@ -99,3 +99,9 @@ def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Sessi
 
     assert response.status_code == 200
     assert response.json() == {"message": "Deleted test-uuid"}
+
+
+def test_update_connector_returns_404_when_not_found(client: TestClient, db: Session):
+    response = client.put("/connectors/test-uuid")
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Connector not found"}

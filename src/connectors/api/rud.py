@@ -65,3 +65,14 @@ async def delete_connector(uuid: str, db: Session = Depends(get_db)):
     storage = Storage()
     storage.delete(uuid)
     return {"message": f"Deleted {uuid}"}
+
+
+@router.put("/{uuid}")
+async def update_connector_data(uuid: str, db: Session = Depends(get_db)):
+    """Update a connector data"""
+    # verify that resource exists in database
+    connector = get_connector(db, uuid)
+    if connector is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Connector not found"
+        )
