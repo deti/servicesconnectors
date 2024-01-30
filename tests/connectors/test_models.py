@@ -4,6 +4,7 @@ from faker import Faker
 from sqlalchemy.orm import Session
 
 from src.connectors.models import (Connector, create_connector,
+                                   delete_connector_from_db,
                                    get_all_connectors, get_connector,
                                    get_or_create_connector)
 from src.connectors.schemas import ConnectorCreate
@@ -89,3 +90,12 @@ def test_all_connectors_uuids_returns_empty_list_when_no_connector(db: Session):
 def test_all_connectors_uuids_returns_uuids_when_connectors_exsited(db: Session):
     expected_uuids = [create_connector(db, fake_connector_create()) for _ in range(10)]
     assert set(get_all_connectors(db)) == set(expected_uuids)
+
+
+def test_delete_connector_from_db_deletes_connector_when_exsited(db: Session):
+    connector = create_connector(db, fake_connector_create())
+    connector_uuid = str(connector.uuid)  # avoid mypy error
+    assert get_connector(db, connector_uuid) is not None
+
+    delete_connector_from_db(db, connector_uuid)
+    assert get_connector(db, connector_uuid) is None

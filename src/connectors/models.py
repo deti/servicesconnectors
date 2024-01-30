@@ -68,3 +68,11 @@ def get_or_create_connector(db: Session, connector_info: ConnectorCreate) -> Con
     if connector:
         return connector
     return create_connector(db, connector_info, item_uuid)
+
+
+def delete_connector_from_db(db: Session, connector_uuid: str) -> None:
+    """Delete a connector in Database"""
+    connector = get_connector(db, connector_uuid)
+    if connector:
+        db.delete(connector)
+        db.commit()

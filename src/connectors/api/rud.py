@@ -3,7 +3,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.connectors.models import get_all_connectors, get_connector
+from src.connectors.models import (delete_connector_from_db,
+                                   get_all_connectors, get_connector)
 from src.connectors.storage import Storage
 from src.dependencies import get_db
 
@@ -48,3 +49,19 @@ async def read_connector_data(uuid: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
 
     return item
+
+
+@router.delete("/{uuid}")
+async def delete_connector(uuid: str, db: Session = Depends(get_db)):
+    """Delete a connector"""
+    # verify that resource exists in database
+    connector = get_connector(db, uuid)
+    if connector is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Connector not found"
+        )
+
+    delete_connector_from_db(db, uuid)
+    storage = Storage()
+    storage.delete(uuid)
+    return {"message": f"Deleted {uuid}"}
