@@ -3,6 +3,7 @@
 from fastapi import APIRouter
 
 from .appstore import router as appstore_router
+from .rud import router as rud_router
 
 router = APIRouter(
     prefix="/connectors",
@@ -10,4 +11,5 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+router.include_router(rud_router)
 router.include_router(appstore_router)

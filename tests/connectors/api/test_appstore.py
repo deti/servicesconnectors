@@ -1,10 +1,15 @@
+from unittest import mock
+
 import pytest
 import respx
 from faker import Faker
 from fastapi.testclient import TestClient
 from httpx import Response
+from sqlalchemy.orm import Session
 
 from src.connectors.api.appstore import AppStoreItem, build_appstore_url
+from src.connectors.models import Connector, create_connector
+from src.connectors.schemas import ConnectorCreate
 
 fake = Faker()
 
@@ -64,7 +69,7 @@ def test_create_appstore_returns_404_if_not_found(client: TestClient):
 
 
 @respx.mock
-def test_create_appstore_connector(client: TestClient):
+def test_create_appstore_connector(client: TestClient, db: Session):
     item = fake_appstore_item()
 
     app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(200))
@@ -72,8 +77,48 @@ def test_create_appstore_connector(client: TestClient):
     response = client.post("/connectors/appstore", json=item.model_dump())
     assert app_route.called
 
+    connector = db.query(Connector).first()
+    assert connector is not None
+
     assert response.status_code == 200
     assert response.json() == {
         "connector_type": "appstore",
         "message": f"Created '{item.description}'",
+        "uuid": connector.uuid,
+    }
+
+
+@respx.mock
+def test_create_appstore_connector_do_not_create_duplicate(
+    client: TestClient, db: Session
+):
+    item = fake_appstore_item()
+
+    connector_create = ConnectorCreate(
+        connector_type="appstore",
+        connector_settings={
+            "connector_type": "appstore",
+            "region": item.region,
+            "slug": item.slug,
+            "appid": item.appid,
+        },
+        description=item.description,
+    )
+    connector = create_connector(db, connector_create)
+
+    app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(200))
+
+    # Ensure connector is not created
+    with mock.patch(
+        "src.connectors.models.create_connector",
+    ) as mock_create_connector:
+        response = client.post("/connectors/appstore", json=item.model_dump())
+        assert mock_create_connector.called is False
+    assert app_route.called
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "connector_type": "appstore",
+        "message": f"Created '{item.description}'",
+        "uuid": connector.uuid,
     }

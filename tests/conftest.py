@@ -31,7 +31,7 @@ def db() -> Generator:
     command.downgrade(alembic_cfg, "base")
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def client() -> Generator:
     """Test client fixture"""
     with TestClient(app) as c:
