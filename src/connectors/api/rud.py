@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.connectors.models import all_connectors_uuids, get_connector
+from src.connectors.models import get_all_connectors, get_connector
 from src.connectors.storage import Storage
 from src.dependencies import get_db
 
@@ -11,9 +11,9 @@ router = APIRouter()
 
 
 @router.get("/")
-def get_all_connectors_uuids(db: Session = Depends(get_db)):
+def get_all_connectors_configuration(db: Session = Depends(get_db)):
     """Get all connectors"""
-    return {"uuids": all_connectors_uuids(db)}
+    return get_all_connectors(db)
 
 
 @router.get(
@@ -27,15 +27,11 @@ def get_all_connectors_uuids(db: Session = Depends(get_db)):
         },
         status.HTTP_204_NO_CONTENT: {
             "description": "Connector is not fetched yet",
-            "content": {
-                "application/json": {
-                    "example": {"detail": "Connector is not fetched yet"}
-                }
-            },
+            "content": None,
         },
     },
 )
-async def read_appstore_connector(uuid: str, db: Session = Depends(get_db)):
+async def read_connector_data(uuid: str, db: Session = Depends(get_db)):
     """Read a connector data"""
 
     # verify that resource exists in database

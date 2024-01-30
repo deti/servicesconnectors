@@ -1,7 +1,7 @@
 """ Connector model and functions """
 
 import json
-from typing import List, Optional
+from typing import Optional, Sequence
 
 from sqlalchemy import Column, DateTime, String, Text
 from sqlalchemy.orm import Session
@@ -37,9 +37,9 @@ def get_connector(db: Session, connector_uuid: str) -> Optional[Connector]:
     return db.query(Connector).filter(Connector.uuid == connector_uuid).first()
 
 
-def all_connectors_uuids(db: Session) -> List[str]:
+def get_all_connectors(db: Session) -> Sequence[Connector]:
     """Get all connectors uuids from Database"""
-    return [uuid for uuid, in db.query(Connector.uuid).all()]
+    return db.query(Connector).all()
 
 
 def create_connector(

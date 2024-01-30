@@ -3,8 +3,8 @@ import json
 from faker import Faker
 from sqlalchemy.orm import Session
 
-from src.connectors.models import (Connector, all_connectors_uuids,
-                                   create_connector, get_connector,
+from src.connectors.models import (Connector, create_connector,
+                                   get_all_connectors, get_connector,
                                    get_or_create_connector)
 from src.connectors.schemas import ConnectorCreate
 from src.connectors.utils import generate_uuid_from_dict
@@ -83,11 +83,9 @@ def test_or_create_connector_returns_connector_when_exsited(db: Session):
 
 
 def test_all_connectors_uuids_returns_empty_list_when_no_connector(db: Session):
-    assert all_connectors_uuids(db) == []
+    assert get_all_connectors(db) == []
 
 
 def test_all_connectors_uuids_returns_uuids_when_connectors_exsited(db: Session):
-    expected_uuids = [
-        create_connector(db, fake_connector_create()).uuid for _ in range(10)
-    ]
-    assert set(all_connectors_uuids(db)) == set(expected_uuids)
+    expected_uuids = [create_connector(db, fake_connector_create()) for _ in range(10)]
+    assert set(get_all_connectors(db)) == set(expected_uuids)

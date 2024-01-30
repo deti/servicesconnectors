@@ -9,10 +9,10 @@ from src.connectors.models import Connector
 def test_get_all_connectors_uuids_gets_nothing(client: TestClient, db: Session):
     response = client.get("/connectors")
     assert response.status_code == 200
-    assert response.json() == {"uuids": []}
+    assert response.json() == []
 
 
-def test_get_all_connectors_uuids_gets_one(client: TestClient, db: Session):
+def test_get_all_connectors_uuids(client: TestClient, db: Session):
     connector = Connector(
         uuid="test-uuid",
         connector_type="appstore",
@@ -21,10 +21,21 @@ def test_get_all_connectors_uuids_gets_one(client: TestClient, db: Session):
     )
     db.add(connector)
     db.commit()
+    db.refresh(connector)
 
     response = client.get("/connectors")
     assert response.status_code == 200
-    assert response.json() == {"uuids": ["test-uuid"]}
+
+    assert response.json() == [
+        {
+            "uuid": "test-uuid",
+            "connector_type": "appstore",
+            "connector_settings": '{"region": "us", "slug": "test", "appid": "123456"}',
+            "description": "test description",
+            "created_at": f"{connector.created_at.isoformat()}",
+            "modified_at": f"{connector.modified_at.isoformat()}",
+        }
+    ]
 
 
 def test_get_connector_returns_404_when_not_found(client: TestClient, db: Session):
