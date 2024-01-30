@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 from dataclasses_json import DataClassJsonMixin
 
 from src.connectors.models import Connector as ConnectorModel
-from src.connectors.storage import Storage
 
 
 def get_element_text(
@@ -52,8 +51,7 @@ class AppStoreItem(DataClassJsonMixin):  # pylint: disable=too-many-instance-att
 class AppstoreConnector:
     """Connector for AppStore"""
 
-    def __init__(self, storage: Storage, connector_model: ConnectorModel):
-        self.storage = storage
+    def __init__(self, connector_model: ConnectorModel):
         self.connector_model = ConnectorModel
         self.item_uuid = connector_model.uuid
         self.connector_type = connector_model.connector_type
@@ -61,7 +59,7 @@ class AppstoreConnector:
             connector_model.connector_settings  # type: ignore
         )
 
-    def read_source(self) -> AppStoreItem:
+    def read_source(self) -> dict:
         """Read source data from AppStore"""
         url = (
             f"https://apps.apple.com/{self.connector_settings['region']}"
@@ -93,9 +91,4 @@ class AppstoreConnector:
             ),
         )
 
-        return item
-
-    def syncronize(self):
-        """Syncronize data from AppStore to the storage"""
-        item = self.read_source()
-        self.storage.write(item.to_dict(), item.item_uuid)
+        return item.to_dict()

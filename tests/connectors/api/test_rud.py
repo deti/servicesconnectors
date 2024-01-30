@@ -1,21 +1,11 @@
 from unittest.mock import ANY, patch
 
-from faker import Faker
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from src.connectors.models import Connector
+from tests.connectors.fakes import fake_connector
 
-fake = Faker()
-
-
-def fake_connector() -> Connector:
-    return Connector(
-        uuid=fake.uuid4(),
-        connector_type=fake.word(),
-        connector_settings=fake.json(),
-        description=fake.sentence(),
-    )
 
 def add_fake_connector(db: Session) -> Connector:
     connector = fake_connector()
@@ -91,8 +81,6 @@ def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Sessi
         patch("src.connectors.api.rud.Storage") as mock_storage,
     ):
         mock_get_connector.return_value = True
-        mock_delete_connector_from_db.return_value = None
-        mock_storage().delete.return_value = None
         response = client.delete("/connectors/test-uuid")
 
         mock_get_connector.assert_called_once_with(ANY, "test-uuid")
@@ -117,14 +105,13 @@ def test_update_connector_returns_200_when_updated(client: TestClient, db: Sessi
 
     with (
         patch("src.connectors.api.rud.get_connector") as mock_get_connector,
-        patch("src.connectors.api.rud.connector_runner") as mock_connector_runner,
+        patch("src.connectors.api.rud.run_connector") as mock_run_connector,
     ):
         mock_get_connector.return_value = connector
-        mock_connector_runner.return_value = None
         response = client.put(f"/connectors/{connector.uuid}")
 
         mock_get_connector.assert_called_once_with(ANY, connector.uuid)
-        mock_connector_runner.assert_called_once_with(connector)
+        mock_run_connector.assert_called_once_with(connector)
 
     assert response.status_code == 200
     assert response.json() == {"message": f"Updated {connector.uuid}"}

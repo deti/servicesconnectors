@@ -9,7 +9,7 @@ class RunnerException(Exception):
     """Runner exception"""
 
 
-def connector_runner(connector: Connector):
+def run_connector(connector: Connector):
     """Run a connector"""
     storage = Storage()
 
@@ -18,7 +18,9 @@ def connector_runner(connector: Connector):
         connector_class = AppstoreConnector
 
     if connector_class is None:
-        raise RunnerException(f"Connector {connector.connector_settings} not found")
+        raise RunnerException(f"Connector {connector.connector_type} not found")
 
-    connector_executor = connector_class(storage, connector)
-    connector_executor.syncronize()
+    connector_executor = connector_class(connector)
+    data = connector_executor.read_source()
+
+    storage.write(data, connector.uuid)  # type: ignore

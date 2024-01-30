@@ -1,0 +1,15 @@
+###
+
+POST http://127.0.0.1:8000/connectors/appstore
+Accept: application/json
+Content-Type: application/json
+
+{
+  "region": "us",
+  "slug": "spotify-music-and-podcasts/",
+  "appid": "id324684580",
+  "description": "Spotify Appstore application"
+}
+
+
+####
