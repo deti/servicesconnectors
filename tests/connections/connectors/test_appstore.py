@@ -13,9 +13,9 @@ from tests.connections.fakes import fake_connection
 def test_non_200_response_raises_exception():
     """Test non 200 response raises exception"""
 
-    connector_model = fake_connection()
-    settings = json.loads(connector_model.settings)
-    appstore_connector = AppstoreConnector(connector_model)
+    connection = fake_connection()
+    settings = json.loads(connection.settings)
+    connector = AppstoreConnector(connection)
 
     region = settings["region"]
     slug = settings["slug"]
@@ -26,7 +26,7 @@ def test_non_200_response_raises_exception():
     )
 
     with pytest.raises(Exception):
-        appstore_connector.read_source()
+        connector.read_source()
 
     assert app_route.called
     assert app_route.call_count == 1
@@ -36,9 +36,9 @@ def test_non_200_response_raises_exception():
 def test_200_response_returns_appstore_item():
     """Test 200 response returns appstore item"""
 
-    connector_model = fake_connection()
-    settings = json.loads(connector_model.settings)
-    appstore_connector = AppstoreConnector(connector_model)
+    connection = fake_connection()
+    settings = json.loads(connection.settings)
+    connector = AppstoreConnector(connection)
 
     region = settings["region"]
     slug = settings["slug"]
@@ -63,7 +63,7 @@ def test_200_response_returns_appstore_item():
     ):
         mock_get_element_text.return_value = "mocked text"
         mock_get_all_element_text.return_value = reviews
-        appstore_item = appstore_connector.read_source()
+        appstore_item = connector.read_source()
 
         # Assert parameters passed to get_element_text
         mock_get_element_text.assert_has_calls(
@@ -86,7 +86,7 @@ def test_200_response_returns_appstore_item():
     assert app_route.call_count == 1
 
     assert appstore_item == {
-        "item_uuid": connector_model.uuid,
+        "item_uuid": connection.uuid,
         "type": "appstore",
         "url": appstore_url,
         "title": "mocked text",
