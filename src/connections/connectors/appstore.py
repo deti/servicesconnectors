@@ -8,7 +8,7 @@ import httpx
 from bs4 import BeautifulSoup
 from dataclasses_json import DataClassJsonMixin
 
-from src.connections.models import Connection as ConnectorModel
+from src.connections.models import Connection
 
 
 def get_element_text(
@@ -85,8 +85,8 @@ class AppstoreConnector:
 
         return item.to_dict()
 
-    def __init__(self, connector_model: ConnectorModel):
-        self.connector_model = ConnectorModel
-        self.item_uuid = connector_model.uuid
-        self.type = connector_model.type
-        self.settings = json.loads(connector_model.settings)  # type: ignore
+    def __init__(self, connection: Connection):
+        self.connection = connection
+        self.item_uuid = connection.uuid
+        self.type = connection.type
+        self.settings = json.loads(connection.settings)  # type: ignore
