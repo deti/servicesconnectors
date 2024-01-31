@@ -1,4 +1,4 @@
-""" Connector read update delete operations """
+""" Connections read update delete operations """
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -13,8 +13,8 @@ router = APIRouter()
 
 
 @router.get("/")
-def get_all_connectors_configuration(db: Session = Depends(get_db)):
-    """Get all connectors"""
+def get_all_configured_connections(db: Session = Depends(get_db)):
+    """Get all connections configured across the system"""
     return get_all_connections(db)
 
 
@@ -22,26 +22,26 @@ def get_all_connectors_configuration(db: Session = Depends(get_db)):
     "/{uuid}",
     responses={
         status.HTTP_404_NOT_FOUND: {
-            "description": "Connector not found",
+            "description": "Connection not found",
             "content": {
-                "application/json": {"example": {"detail": "Connector not found"}}
+                "application/json": {"example": {"detail": "Connection not found"}}
             },
         },
         status.HTTP_204_NO_CONTENT: {
-            "description": "Connector is not fetched yet",
+            "description": "Connection is not fetched yet",
             "content": None,
         },
     },
 )
-async def read_connector_data(uuid: str, db: Session = Depends(get_db)):
-    """Read a connector data"""
+async def read_connection_data(uuid: str, db: Session = Depends(get_db)):
+    """Read a connection data"""
 
     # verify that resource exists in database
-    connector = get_connection(db, uuid)
+    connection = get_connection(db, uuid)
 
-    if connector is None:
+    if connection is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Connector not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Connection not found"
         )
 
     storage = Storage()
@@ -53,13 +53,13 @@ async def read_connector_data(uuid: str, db: Session = Depends(get_db)):
 
 
 @router.delete("/{uuid}")
-async def delete_connector(uuid: str, db: Session = Depends(get_db)):
-    """Delete a connector"""
+async def delete_connection(uuid: str, db: Session = Depends(get_db)):
+    """Delete a connection"""
     # verify that resource exists in database
-    connector = get_connection(db, uuid)
-    if connector is None:
+    connection = get_connection(db, uuid)
+    if connection is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Connector not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Connection not found"
         )
 
     delete_connection_from_db(db, uuid)
@@ -69,14 +69,14 @@ async def delete_connector(uuid: str, db: Session = Depends(get_db)):
 
 
 @router.put("/{uuid}")
-async def update_connector_data(uuid: str, db: Session = Depends(get_db)):
-    """Update a connector data"""
+async def update_connection_data(uuid: str, db: Session = Depends(get_db)):
+    """Update a connection data"""
     # verify that resource exists in database
-    connector = get_connection(db, uuid)
-    if connector is None:
+    connection = get_connection(db, uuid)
+    if connection is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Connector not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Connection not found"
         )
 
-    run_connector(connector)
-    return {"message": f"Updated {connector.uuid}"}
+    run_connector(connection)
+    return {"message": f"Updated {connection.uuid}"}

@@ -42,7 +42,7 @@ def test_get_all_connectors_uuids(client: TestClient, db: Session):
 def test_get_connector_returns_404_when_not_found(client: TestClient, db: Session):
     response = client.get("/connectors/test-uuid")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Connector not found"}
+    assert response.json() == {"detail": "Connection not found"}
 
 
 def test_get_connector_returns_204_when_not_fetched_yet(
@@ -69,7 +69,7 @@ def test_get_connector_returns_200_when_fetched(client: TestClient, db: Session)
 def test_delete_connector_returns_404_when_not_found(client: TestClient, db: Session):
     response = client.delete("/connectors/test-uuid")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Connector not found"}
+    assert response.json() == {"detail": "Connection not found"}
 
 
 def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Session):
@@ -97,7 +97,7 @@ def test_update_connector_returns_404_when_not_found(client: TestClient, db: Ses
         response = client.put("/connectors/test-uuid")
         mock_get_connector.assert_called_once_with(ANY, "test-uuid")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Connector not found"}
+    assert response.json() == {"detail": "Connection not found"}
 
 
 def test_update_connector_returns_200_when_updated(client: TestClient, db: Session):
