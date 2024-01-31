@@ -3,6 +3,7 @@
 from fastapi import APIRouter
 
 from .appstore import router as appstore_router
+from .googleplay import router as googleplay_router
 from .rud import router as rud_router
 
 router = APIRouter(
@@ -13,3 +14,4 @@ router = APIRouter(
 
 router.include_router(rud_router)
 router.include_router(appstore_router)
+router.include_router(googleplay_router)
