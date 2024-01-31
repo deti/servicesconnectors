@@ -32,9 +32,9 @@ class Connection(Base):  # type: ignore
     )
 
 
-def get_connection(db: Session, connector_uuid: str) -> Optional[Connection]:
+def get_connection(db: Session, connection_uuid: str) -> Optional[Connection]:
     """Get a connector by uuid from Database"""
-    return db.query(Connection).filter(Connection.uuid == connector_uuid).first()
+    return db.query(Connection).filter(Connection.uuid == connection_uuid).first()
 
 
 def get_all_connections(db: Session) -> Sequence[Connection]:
@@ -43,38 +43,38 @@ def get_all_connections(db: Session) -> Sequence[Connection]:
 
 
 def create_connection(
-    db: Session, connector_info: ConnectionCreate, connector_uuid: Optional[str] = None
+    db: Session, connection_create: ConnectionCreate, connection_uuid: Optional[str] = None
 ) -> Connection:
-    """Create a connector in Database"""
-    if connector_uuid is None:
-        connector_uuid = generate_uuid_from_dict(connector_info.settings)
+    """Create a connection in Database"""
+    if connection_uuid is None:
+        connection_uuid = generate_uuid_from_dict(connection_create.settings)
 
-    connector = Connection(
-        uuid=connector_uuid,
-        type=connector_info.type,
-        settings=json.dumps(connector_info.settings),
-        description=connector_info.description,
+    connection = Connection(
+        uuid=connection_uuid,
+        type=connection_create.type,
+        settings=json.dumps(connection_create.settings),
+        description=connection_create.description,
     )
-    db.add(connector)
+    db.add(connection)
     db.commit()
-    db.refresh(connector)
-    return connector
+    db.refresh(connection)
+    return connection
 
 
 def get_or_create_connection(
-    db: Session, connector_info: ConnectionCreate
+    db: Session, connection_create: ConnectionCreate
 ) -> Connection:
-    """Get or create a connector in Database"""
-    item_uuid = generate_uuid_from_dict(connector_info.settings)
-    connector = get_connection(db, item_uuid)
-    if connector:
-        return connector
-    return create_connection(db, connector_info, item_uuid)
+    """Get or create a connection in Database"""
+    item_uuid = generate_uuid_from_dict(connection_create.settings)
+    connection = get_connection(db, item_uuid)
+    if connection:
+        return connection
+    return create_connection(db, connection_create, item_uuid)
 
 
-def delete_connection_from_db(db: Session, connector_uuid: str) -> None:
-    """Delete a connector in Database"""
-    connector = get_connection(db, connector_uuid)
-    if connector:
-        db.delete(connector)
+def delete_connection_from_db(db: Session, connecton_uuid: str) -> None:
+    """Delete a connecton in Database"""
+    connecton = get_connection(db, connecton_uuid)
+    if connecton:
+        db.delete(connecton)
         db.commit()
