@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from src.connections.api.appstore import AppStoreItem, build_appstore_url
 from src.connections.models import Connection, create_connection
-from src.connections.schemas import ConnectorCreate
+from src.connections.schemas import ConnectionCreate
 
 fake = Faker()
 
@@ -94,7 +94,7 @@ def test_create_appstore_connector_do_not_create_duplicate(
 ):
     item = fake_appstore_item()
 
-    connector_create = ConnectorCreate(
+    connector_create = ConnectionCreate(
         type="appstore",
         settings={
             "type": "appstore",

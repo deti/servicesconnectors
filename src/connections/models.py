@@ -9,7 +9,7 @@ from sqlalchemy.sql import func
 
 from src.database import Base
 
-from .schemas import ConnectorCreate
+from .schemas import ConnectionCreate
 from .utils import generate_uuid_from_dict
 
 
@@ -43,7 +43,7 @@ def get_all_connections(db: Session) -> Sequence[Connection]:
 
 
 def create_connection(
-    db: Session, connector_info: ConnectorCreate, connector_uuid: Optional[str] = None
+    db: Session, connector_info: ConnectionCreate, connector_uuid: Optional[str] = None
 ) -> Connection:
     """Create a connector in Database"""
     if connector_uuid is None:
@@ -62,7 +62,7 @@ def create_connection(
 
 
 def get_or_create_connection(
-    db: Session, connector_info: ConnectorCreate
+    db: Session, connector_info: ConnectionCreate
 ) -> Connection:
     """Get or create a connector in Database"""
     item_uuid = generate_uuid_from_dict(connector_info.settings)

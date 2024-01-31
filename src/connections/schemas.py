@@ -5,7 +5,7 @@ from typing import Dict
 from pydantic import BaseModel
 
 
-class ConnectorCreate(BaseModel):
+class ConnectionCreate(BaseModel):
     """Connector create schema"""
 
     type: str

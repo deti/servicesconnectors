@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from src.connections.models import get_or_create_connection
-from src.connections.schemas import ConnectorCreate
+from src.connections.schemas import ConnectionCreate
 from src.dependencies import get_db
 
 router = APIRouter()
@@ -40,7 +40,7 @@ async def create_appstore_connector(item: AppStoreItem, db: Session = Depends(ge
                 status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found"
             )
 
-    connector_create = ConnectorCreate(
+    connector_create = ConnectionCreate(
         type="appstore",
         settings={
             "type": "appstore",
