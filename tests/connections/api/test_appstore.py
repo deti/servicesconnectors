@@ -70,7 +70,7 @@ def test_create_appstore_returns_404_if_not_found(client: TestClient):
 
 
 @respx.mock
-def test_create_appstore_connector(client: TestClient, db: Session):
+def test_create_appstore_connection(client: TestClient, db: Session):
     item = fake_appstore_item()
 
     app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(200))
@@ -78,24 +78,24 @@ def test_create_appstore_connector(client: TestClient, db: Session):
     response = client.post("/connections/appstore", json=item.model_dump())
     assert app_route.called
 
-    connector = db.query(Connection).first()
-    assert connector is not None
+    connection = db.query(Connection).first()
+    assert connection is not None
 
     assert response.status_code == 200
     assert response.json() == {
         "type": "appstore",
         "message": f"Created '{item.description}'",
-        "uuid": connector.uuid,
+        "uuid": connection.uuid,
     }
 
 
 @respx.mock
-def test_create_appstore_connector_do_not_create_duplicate(
+def test_create_appstore_connection_do_not_create_duplicate(
     client: TestClient, db: Session
 ):
     item = fake_appstore_item()
 
-    connector_create = ConnectionCreate(
+    connection_create = ConnectionCreate(
         type="appstore",
         settings={
             "type": "appstore",
@@ -105,21 +105,21 @@ def test_create_appstore_connector_do_not_create_duplicate(
         },
         description=item.description,
     )
-    connector = create_connection(db, connector_create)
+    connection = create_connection(db, connection_create)
 
     app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(200))
 
-    # Ensure connector is not created
+    # Ensure connection is not created
     with mock.patch(
         "src.connections.models.create_connection",
-    ) as mock_create_connector:
+    ) as mock_create_connection:
         response = client.post("/connections/appstore", json=item.model_dump())
-        assert mock_create_connector.called is False
+        assert mock_create_connection.called is False
     assert app_route.called
 
     assert response.status_code == 200
     assert response.json() == {
         "type": "appstore",
         "message": f"Created '{item.description}'",
-        "uuid": connector.uuid,
+        "uuid": connection.uuid,
     }
