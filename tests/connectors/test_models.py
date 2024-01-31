@@ -3,8 +3,7 @@ import json
 from faker import Faker
 from sqlalchemy.orm import Session
 
-from src.connectors.models import (Connector, create_connector,
-                                   delete_connector_from_db,
+from src.connectors.models import (create_connector, delete_connector_from_db,
                                    get_all_connectors, get_connector,
                                    get_or_create_connector)
 from src.connectors.schemas import ConnectorCreate
@@ -26,7 +25,7 @@ def test_get_connector_returns_connector_when_exsited(db: Session):
     db.commit()
     db.refresh(connector)
 
-    assert get_connector(db, connector.uuid) == connector
+    assert get_connector(db, str(connector.uuid)) == connector
 
 
 def fake_connector_create() -> ConnectorCreate:

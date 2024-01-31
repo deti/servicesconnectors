@@ -51,14 +51,6 @@ class AppStoreItem(DataClassJsonMixin):  # pylint: disable=too-many-instance-att
 class AppstoreConnector:
     """Connector for AppStore"""
 
-    def __init__(self, connector_model: ConnectorModel):
-        self.connector_model = ConnectorModel
-        self.item_uuid = connector_model.uuid
-        self.connector_type = connector_model.connector_type
-        self.connector_settings = json.loads(
-            connector_model.connector_settings  # type: ignore
-        )
-
     def read_source(self) -> dict:
         """Read source data from AppStore"""
         url = (
@@ -76,7 +68,7 @@ class AppstoreConnector:
         item = AppStoreItem(
             item_uuid=str(self.item_uuid),
             connector_type="appstore",
-            url="https://apps.apple.com/us/app/spotify-music-and-podcasts/id324684580",
+            url=url,
             title=get_element_text(soup, "h1", "product-header__title"),
             subtitle=get_element_text(soup, "h2", "product-header__subtitle"),
             company=get_element_text(soup, "h2", "product-header__identity"),
@@ -92,3 +84,11 @@ class AppstoreConnector:
         )
 
         return item.to_dict()
+
+    def __init__(self, connector_model: ConnectorModel):
+        self.connector_model = ConnectorModel
+        self.item_uuid = connector_model.uuid
+        self.connector_type = connector_model.connector_type
+        self.connector_settings = json.loads(
+            connector_model.connector_settings  # type: ignore
+        )
