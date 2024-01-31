@@ -1,6 +1,5 @@
 """ Appstore connector for data syncronization """
 
-import json
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -8,7 +7,7 @@ import httpx
 from bs4 import BeautifulSoup
 from dataclasses_json import DataClassJsonMixin
 
-from src.connections.models import Connection
+from .abstractconnector import Connector
 
 
 def get_element_text(
@@ -48,7 +47,7 @@ class AppStoreItem(DataClassJsonMixin):  # pylint: disable=too-many-instance-att
     reviews: Optional[str] = None
 
 
-class AppstoreConnector:
+class AppstoreConnector(Connector):
     """Connector for AppStore"""
 
     def read_source(self) -> dict:
@@ -84,9 +83,3 @@ class AppstoreConnector:
         )
 
         return item.to_dict()
-
-    def __init__(self, connection: Connection):
-        self.connection = connection
-        self.item_uuid = connection.uuid
-        self.type = connection.type
-        self.settings = json.loads(connection.settings)  # type: ignore

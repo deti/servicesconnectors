@@ -5,8 +5,18 @@ import pytest
 import respx
 from httpx import Response
 
+from src.connections.connectors.abstractconnector import Connector
 from src.connections.connectors.appstore import AppstoreConnector
 from tests.connections.fakes import fake_connection
+
+
+def test_appstor_inherits_from_connector():
+    """Test AppstoreConnector inherits from Connector"""
+
+    connection = fake_connection()
+    connector = AppstoreConnector(connection)
+
+    assert isinstance(connector, Connector)
 
 
 @respx.mock
