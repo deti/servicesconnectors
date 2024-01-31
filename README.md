@@ -14,6 +14,7 @@ Will configure project for local run and development.
 
 ## API documentation
 API documentation is available at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+when applicaiton is running.
 
 ## Run tests
 ```bash

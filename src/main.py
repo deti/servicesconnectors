@@ -10,6 +10,6 @@ app.include_router(connections_router)
 
 
 @app.get("/")
-async def root():
-    """Root endpoint for testing purposes"""
+async def alive():
+    """Alive endpoint for health checks"""
     return {"message": "alive"}

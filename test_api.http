@@ -1,4 +1,4 @@
-###
+### Add appstore Spotify
 
 POST http://127.0.0.1:8000/connections/appstore
 Accept: application/json
@@ -12,4 +12,63 @@ Content-Type: application/json
 }
 
 
-####
+#### Add Google Play Spotify
+
+POST http://127.0.0.1:8000/connections/googleplay
+Accept: application/json
+Content-Type: application/json
+
+{
+  "slug": "com.spotify.music",
+  "description": "Spotify at Google Play"
+}
+
+
+#### Get all connections
+GET http://127.0.0.1:8000/connections
+Accept: application/json
+
+
+#### Trigger update for Appstore spotify
+PUT http://127.0.0.1:8000/connections/8745794c-13ea-24d2-8918-76ddc25f3e60
+Accept: application/json
+
+
+#### Trigger update for Google Play Spotify
+PUT http://127.0.0.1:8000/connections/cc19e257-bd03-e910-c396-a5cadc36c38a
+Accept: application/json
+
+
+#### Get Apple Store Spotify info
+GET http://127.0.0.1:8000/connections/8745794c-13ea-24d2-8918-76ddc25f3e60
+Accept: application/json
+
+
+#### Get update for Google Play Spotify
+GET http://127.0.0.1:8000/connections/cc19e257-bd03-e910-c396-a5cadc36c38a
+Accept: application/json
+
+
+#### Delete Apple Store Spotify info
+DELETE http://127.0.0.1:8000/connections/8745794c-13ea-24d2-8918-76ddc25f3e60
+Accept: application/json
+
+
+#### Delete Google Play Spotify
+DELETE  http://127.0.0.1:8000/connections/cc19e257-bd03-e910-c396-a5cadc36c38a
+Accept: application/json
+
+
+#### Trigger update for unknown connection
+PUT http://127.0.0.1:8000/connections/non-existing-connectin
+Accept: application/json
+
+
+#### Get unknown connection
+GET http://127.0.0.1:8000/connections/non-existing-connectin
+Accept: application/json
+
+
+#### Delete unknown connection
+DELETE http://127.0.0.1:8000/connections/non-existing-connectin
+Accept: application/json
