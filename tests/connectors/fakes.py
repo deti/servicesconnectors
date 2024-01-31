@@ -2,12 +2,12 @@ import json
 
 from faker import Faker
 
-from src.connectors.models import Connector
+from src.connectors.models import Connection
 
 fake = Faker()
 
 
-def fake_appstore_connector_settings() -> dict:
+def fake_appstore_settings() -> dict:
     return {
         "region": fake.country_code().lower(),
         "slug": fake.slug(),
@@ -15,11 +15,11 @@ def fake_appstore_connector_settings() -> dict:
     }
 
 
-def fake_connector() -> Connector:
-    connector_settings = fake_appstore_connector_settings()
-    return Connector(
+def fake_connector() -> Connection:
+    settings = fake_appstore_settings()
+    return Connection(
         uuid=fake.uuid4(),
-        connector_type=fake.word(),
-        connector_settings=json.dumps(connector_settings),
+        type=fake.word(),
+        settings=json.dumps(settings),
         description=fake.sentence(),
     )

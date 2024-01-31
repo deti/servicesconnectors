@@ -8,6 +8,6 @@ from pydantic import BaseModel
 class ConnectorCreate(BaseModel):
     """Connector create schema"""
 
-    connector_type: str
-    connector_settings: Dict[str, str]
+    type: str
+    settings: Dict[str, str]
     description: str

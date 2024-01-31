@@ -3,11 +3,11 @@ from unittest.mock import ANY, patch
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from src.connectors.models import Connector
+from src.connectors.models import Connection
 from tests.connectors.fakes import fake_connector
 
 
-def add_fake_connector(db: Session) -> Connector:
+def add_fake_connector(db: Session) -> Connection:
     connector = fake_connector()
     db.add(connector)
     db.commit()
@@ -30,8 +30,8 @@ def test_get_all_connectors_uuids(client: TestClient, db: Session):
     assert response.json() == [
         {
             "uuid": connector.uuid,
-            "connector_type": connector.connector_type,
-            "connector_settings": connector.connector_settings,
+            "type": connector.type,
+            "settings": connector.settings,
             "description": connector.description,
             "created_at": f"{connector.created_at.isoformat()}",
             "modified_at": f"{connector.modified_at.isoformat()}",

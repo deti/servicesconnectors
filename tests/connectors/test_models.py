@@ -8,8 +8,7 @@ from src.connectors.models import (create_connector, delete_connector_from_db,
                                    get_or_create_connector)
 from src.connectors.schemas import ConnectorCreate
 from src.connectors.utils import generate_uuid_from_dict
-from tests.connectors.fakes import (fake_appstore_connector_settings,
-                                    fake_connector)
+from tests.connectors.fakes import fake_appstore_settings, fake_connector
 
 fake = Faker()
 
@@ -30,8 +29,8 @@ def test_get_connector_returns_connector_when_exsited(db: Session):
 
 def fake_connector_create() -> ConnectorCreate:
     return ConnectorCreate(
-        connector_type=fake.word(),
-        connector_settings=fake_appstore_connector_settings(),
+        type=fake.word(),
+        settings=fake_appstore_settings(),
         description=fake.sentence(),
     )
 
@@ -41,10 +40,8 @@ def test_create_connector_creates_connector(db: Session):
 
     connector = create_connector(db, connector_create)
 
-    assert connector.connector_type == connector_create.connector_type
-    assert connector.connector_settings == json.dumps(
-        connector_create.connector_settings
-    )
+    assert connector.type == connector_create.type
+    assert connector.settings == json.dumps(connector_create.settings)
     assert connector.description == connector_create.description
 
 
@@ -52,16 +49,14 @@ def test_or_create_connector_creates_connector_when_not_exsited(db: Session):
     connector_create = fake_connector_create()
 
     # No Connect before test
-    expected_uuid = generate_uuid_from_dict(connector_create.connector_settings)
+    expected_uuid = generate_uuid_from_dict(connector_create.settings)
     assert get_connector(db, expected_uuid) is None
 
     # Connector created
     connector = get_or_create_connector(db, connector_create)
     assert expected_uuid == connector.uuid
-    assert connector.connector_type == connector_create.connector_type
-    assert connector.connector_settings == json.dumps(
-        connector_create.connector_settings
-    )
+    assert connector.type == connector_create.type
+    assert connector.settings == json.dumps(connector_create.settings)
     assert connector.description == connector_create.description
 
 

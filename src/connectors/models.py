@@ -13,14 +13,14 @@ from .schemas import ConnectorCreate
 from .utils import generate_uuid_from_dict
 
 
-class Connector(Base):  # type: ignore
-    """Connector model"""
+class Connection(Base):  # type: ignore
+    """Connection model"""
 
-    __tablename__ = "connectors"
+    __tablename__ = "connections"
 
     uuid = Column(String(36), primary_key=True, unique=True, nullable=False)
-    connector_type = Column(String(50), nullable=False)
-    connector_settings = Column(Text, nullable=False)
+    type = Column(String(50), nullable=False)
+    settings = Column(Text, nullable=False)
     description = Column(String(100))
     created_at = Column(
         DateTime, server_default=func.now()  # pylint: disable=not-callable
@@ -32,27 +32,27 @@ class Connector(Base):  # type: ignore
     )
 
 
-def get_connector(db: Session, connector_uuid: str) -> Optional[Connector]:
+def get_connector(db: Session, connector_uuid: str) -> Optional[Connection]:
     """Get a connector by uuid from Database"""
-    return db.query(Connector).filter(Connector.uuid == connector_uuid).first()
+    return db.query(Connection).filter(Connection.uuid == connector_uuid).first()
 
 
-def get_all_connectors(db: Session) -> Sequence[Connector]:
+def get_all_connectors(db: Session) -> Sequence[Connection]:
     """Get all connectors uuids from Database"""
-    return db.query(Connector).all()
+    return db.query(Connection).all()
 
 
 def create_connector(
     db: Session, connector_info: ConnectorCreate, connector_uuid: Optional[str] = None
-) -> Connector:
+) -> Connection:
     """Create a connector in Database"""
     if connector_uuid is None:
-        connector_uuid = generate_uuid_from_dict(connector_info.connector_settings)
+        connector_uuid = generate_uuid_from_dict(connector_info.settings)
 
-    connector = Connector(
+    connector = Connection(
         uuid=connector_uuid,
-        connector_type=connector_info.connector_type,
-        connector_settings=json.dumps(connector_info.connector_settings),
+        type=connector_info.type,
+        settings=json.dumps(connector_info.settings),
         description=connector_info.description,
     )
     db.add(connector)
@@ -61,9 +61,9 @@ def create_connector(
     return connector
 
 
-def get_or_create_connector(db: Session, connector_info: ConnectorCreate) -> Connector:
+def get_or_create_connector(db: Session, connector_info: ConnectorCreate) -> Connection:
     """Get or create a connector in Database"""
-    item_uuid = generate_uuid_from_dict(connector_info.connector_settings)
+    item_uuid = generate_uuid_from_dict(connector_info.settings)
     connector = get_connector(db, item_uuid)
     if connector:
         return connector

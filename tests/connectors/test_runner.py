@@ -9,7 +9,7 @@ from tests.connectors.fakes import fake_connector
 def test_run_connector_raises_on_unknown_connector():
     """Test run connector raises on unknown connector"""
     connector = fake_connector()
-    connector.connector_type = "unknown"
+    connector.type = "unknown"
 
     with pytest.raises(RunnerException) as excinfo:
         run_connector(connector)
@@ -19,7 +19,7 @@ def test_run_connector_raises_on_unknown_connector():
 def test_run_connector_executes_appsotre_connector():
     """Test run connector executes appstore connector"""
     connector = fake_connector()
-    connector.connector_type = "appstore"
+    connector.type = "appstore"
 
     expected_data = {"test": "test"}
 

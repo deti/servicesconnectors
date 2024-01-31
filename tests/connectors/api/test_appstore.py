@@ -8,7 +8,7 @@ from httpx import Response
 from sqlalchemy.orm import Session
 
 from src.connectors.api.appstore import AppStoreItem, build_appstore_url
-from src.connectors.models import Connector, create_connector
+from src.connectors.models import Connection, create_connector
 from src.connectors.schemas import ConnectorCreate
 
 fake = Faker()
@@ -77,12 +77,12 @@ def test_create_appstore_connector(client: TestClient, db: Session):
     response = client.post("/connectors/appstore", json=item.model_dump())
     assert app_route.called
 
-    connector = db.query(Connector).first()
+    connector = db.query(Connection).first()
     assert connector is not None
 
     assert response.status_code == 200
     assert response.json() == {
-        "connector_type": "appstore",
+        "type": "appstore",
         "message": f"Created '{item.description}'",
         "uuid": connector.uuid,
     }
@@ -95,9 +95,9 @@ def test_create_appstore_connector_do_not_create_duplicate(
     item = fake_appstore_item()
 
     connector_create = ConnectorCreate(
-        connector_type="appstore",
-        connector_settings={
-            "connector_type": "appstore",
+        type="appstore",
+        settings={
+            "type": "appstore",
             "region": item.region,
             "slug": item.slug,
             "appid": item.appid,
@@ -118,7 +118,7 @@ def test_create_appstore_connector_do_not_create_duplicate(
 
     assert response.status_code == 200
     assert response.json() == {
-        "connector_type": "appstore",
+        "type": "appstore",
         "message": f"Created '{item.description}'",
         "uuid": connector.uuid,
     }

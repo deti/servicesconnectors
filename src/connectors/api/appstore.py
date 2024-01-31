@@ -41,9 +41,9 @@ async def create_appstore_connector(item: AppStoreItem, db: Session = Depends(ge
             )
 
     connector_create = ConnectorCreate(
-        connector_type="appstore",
-        connector_settings={
-            "connector_type": "appstore",
+        type="appstore",
+        settings={
+            "type": "appstore",
             "region": item.region,
             "slug": item.slug,
             "appid": item.appid,
@@ -53,7 +53,7 @@ async def create_appstore_connector(item: AppStoreItem, db: Session = Depends(ge
     connector = get_or_create_connector(db, connector_create)
 
     return {
-        "connector_type": "appstore",
+        "type": "appstore",
         "message": f"Created '{item.description}'",
         "uuid": connector.uuid,
     }

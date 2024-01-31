@@ -3,7 +3,7 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
-from src.connectors.models import Connector
+from src.connectors.models import Connection
 from src.database import SQLALCHEMY_DATABASE_URL
 
 config = context.config
@@ -11,7 +11,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = Connector.metadata
+target_metadata = Connection.metadata
 
 
 def get_url() -> str:

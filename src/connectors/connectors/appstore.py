@@ -8,7 +8,7 @@ import httpx
 from bs4 import BeautifulSoup
 from dataclasses_json import DataClassJsonMixin
 
-from src.connectors.models import Connector as ConnectorModel
+from src.connectors.models import Connection as ConnectorModel
 
 
 def get_element_text(
@@ -36,7 +36,7 @@ class AppStoreItem(DataClassJsonMixin):  # pylint: disable=too-many-instance-att
     """Appstore extracted data item"""
 
     item_uuid: str
-    connector_type: str
+    type: str
     url: str
     title: Optional[str] = None
     subtitle: Optional[str] = None
@@ -54,9 +54,9 @@ class AppstoreConnector:
     def read_source(self) -> dict:
         """Read source data from AppStore"""
         url = (
-            f"https://apps.apple.com/{self.connector_settings['region']}"
-            f"/app/{self.connector_settings['slug']}/"
-            f"{self.connector_settings['appid']}"
+            f"https://apps.apple.com/{self.settings['region']}"
+            f"/app/{self.settings['slug']}/"
+            f"{self.settings['appid']}"
         )
         with httpx.Client() as client:
             response = client.get(url)
@@ -67,7 +67,7 @@ class AppstoreConnector:
 
         item = AppStoreItem(
             item_uuid=str(self.item_uuid),
-            connector_type="appstore",
+            type="appstore",
             url=url,
             title=get_element_text(soup, "h1", "product-header__title"),
             subtitle=get_element_text(soup, "h2", "product-header__subtitle"),
@@ -88,7 +88,5 @@ class AppstoreConnector:
     def __init__(self, connector_model: ConnectorModel):
         self.connector_model = ConnectorModel
         self.item_uuid = connector_model.uuid
-        self.connector_type = connector_model.connector_type
-        self.connector_settings = json.loads(
-            connector_model.connector_settings  # type: ignore
-        )
+        self.type = connector_model.type
+        self.settings = json.loads(connector_model.settings)  # type: ignore

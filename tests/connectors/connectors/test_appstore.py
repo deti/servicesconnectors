@@ -14,12 +14,12 @@ def test_non_200_response_raises_exception():
     """Test non 200 response raises exception"""
 
     connector_model = fake_connector()
-    connector_settings = json.loads(connector_model.connector_settings)
+    settings = json.loads(connector_model.settings)
     appstore_connector = AppstoreConnector(connector_model)
 
-    region = connector_settings["region"]
-    slug = connector_settings["slug"]
-    appid = connector_settings["appid"]
+    region = settings["region"]
+    slug = settings["slug"]
+    appid = settings["appid"]
 
     app_route = respx.get(f"https://apps.apple.com/{region}/app/{slug}/{appid}").mock(
         return_value=Response(404)
@@ -37,12 +37,12 @@ def test_200_response_returns_appstore_item():
     """Test 200 response returns appstore item"""
 
     connector_model = fake_connector()
-    connector_settings = json.loads(connector_model.connector_settings)
+    settings = json.loads(connector_model.settings)
     appstore_connector = AppstoreConnector(connector_model)
 
-    region = connector_settings["region"]
-    slug = connector_settings["slug"]
-    appid = connector_settings["appid"]
+    region = settings["region"]
+    slug = settings["slug"]
+    appid = settings["appid"]
     appstore_url = f"https://apps.apple.com/{region}/app/{slug}/{appid}"
 
     app_route = respx.get(appstore_url).mock(
@@ -87,7 +87,7 @@ def test_200_response_returns_appstore_item():
 
     assert appstore_item == {
         "item_uuid": connector_model.uuid,
-        "connector_type": "appstore",
+        "type": "appstore",
         "url": appstore_url,
         "title": "mocked text",
         "subtitle": "mocked text",
