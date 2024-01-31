@@ -1,4 +1,4 @@
-""" Connectors API routes """
+""" Connections API routes """
 
 from fastapi import APIRouter
 

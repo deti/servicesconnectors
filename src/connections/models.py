@@ -1,4 +1,4 @@
-""" Connector model and functions """
+""" Connection model and functions """
 
 import json
 from typing import Optional, Sequence
@@ -33,7 +33,7 @@ class Connection(Base):  # type: ignore
 
 
 def get_connection(db: Session, connection_uuid: str) -> Optional[Connection]:
-    """Get a connector by uuid from Database"""
+    """Get a connection by uuid from Database"""
     return db.query(Connection).filter(Connection.uuid == connection_uuid).first()
 
 

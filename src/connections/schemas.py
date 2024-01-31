@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 
 class ConnectionCreate(BaseModel):
-    """Connector create schema"""
+    """Connection create schema"""
 
     type: str
     settings: Dict[str, str]
