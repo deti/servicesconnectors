@@ -1,33 +1,45 @@
 """ Google play connections module """
 
-from .connector import Connector, ConnectorException
 from dataclasses import dataclass
-from typing import Optional, List
-from dataclasses_json import DataClassJsonMixin
+from typing import List, Optional
 
 import httpx
 from bs4 import BeautifulSoup
+from dataclasses_json import DataClassJsonMixin
+
+from .connector import Connector, ConnectorException
+
 
 class GooglePlayConnectorException(ConnectorException):
     """Base exception for GooglePlay connectors"""
 
-def get_element_text(soup: BeautifulSoup, element: str, attributes: Optional[dict] = None) -> Optional[str]:
+
+def get_element_text(
+    soup: BeautifulSoup, element: str, attributes: Optional[dict] = None
+) -> Optional[str]:
+    """Get first element text from http by attributes"""
     element = soup.find(element, attributes)
     if element is None:
-        return
+        return None
     return element.text.strip()
 
-def get_all_element_text(soup: BeautifulSoup, element: str, class_: Optional[str] = None) -> Optional[List[str]]:
+
+def get_all_element_text(
+    soup: BeautifulSoup, element: str, class_: Optional[str] = None
+) -> Optional[List[str]]:
+    """Get all element text from html by CSS class"""
     elements = soup.find_all(element, class_=class_)
     if elements is None:
-        return
+        return None
     return [element.text.strip() for element in elements]
 
 
 @dataclass
 class GooglePlayItem(DataClassJsonMixin):
+    """Google play extracted data item"""
+
     url: str
-    itemtype: str="googleplay"
+    itemtype: str = "googleplay"
     name: Optional[str] = None
     description: Optional[str] = None
     rating: Optional[str] = None
@@ -42,9 +54,11 @@ class GooglePlayConnector(Connector):
         url = f"https://play.google.com/store/apps/details?id={self.settings['slug']}"
         response = httpx.get(url)
         if response.status_code != 200:
-            raise GooglePlayConnectorException(f"Error: {response.status_code}", self.settings)
+            raise GooglePlayConnectorException(
+                f"Error: {response.status_code}", self.settings
+            )
 
-        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(response.text, "html.parser")
 
         return GooglePlayItem(
             url=url,

@@ -9,6 +9,7 @@ from dataclasses_json import DataClassJsonMixin
 
 from .connector import Connector, ConnectorException
 
+
 class AppStoreConnectorException(ConnectorException):
     """Base exception for Appstore connectors"""
 
@@ -63,7 +64,9 @@ class AppstoreConnector(Connector):
         with httpx.Client() as client:
             response = client.get(url)
             if response.status_code != 200:
-                raise AppStoreConnectorException(f"Error: {response.status_code}", self.settings)
+                raise AppStoreConnectorException(
+                    f"Error: {response.status_code}", self.settings
+                )
 
         soup = BeautifulSoup(response.text, "html.parser")
 

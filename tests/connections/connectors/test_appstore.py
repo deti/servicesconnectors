@@ -5,12 +5,20 @@ import pytest
 import respx
 from httpx import Response
 
-from src.connections.connectors.connector import Connector
-from src.connections.connectors.appstore import AppstoreConnector, AppStoreConnectorException
+from src.connections.connectors.appstore import (AppstoreConnector,
+                                                 AppStoreConnectorException)
+from src.connections.connectors.connector import Connector, ConnectorException
 from tests.connections.fakes import fake_connection
 
 
-def test_appstor_inherits_from_connector():
+def test_appstore_exception_inherits_from_connector_exception():
+    """Test AppStoreConnectorException inherits from ConnectorException"""
+
+    exception = AppStoreConnectorException("test", {})
+    assert isinstance(exception, ConnectorException)
+
+
+def test_appstore_inherits_from_connector():
     """Test AppstoreConnector inherits from Connector"""
 
     connection = fake_connection()
