@@ -7,9 +7,9 @@ from fastapi.testclient import TestClient
 from httpx import Response
 from sqlalchemy.orm import Session
 
-from src.connectors.api.appstore import AppStoreItem, build_appstore_url
-from src.connectors.models import Connection, create_connection
-from src.connectors.schemas import ConnectorCreate
+from src.connections.api.appstore import AppStoreItem, build_appstore_url
+from src.connections.models import Connection, create_connection
+from src.connections.schemas import ConnectorCreate
 
 fake = Faker()
 
@@ -110,7 +110,7 @@ def test_create_appstore_connector_do_not_create_duplicate(
 
     # Ensure connector is not created
     with mock.patch(
-        "src.connectors.models.create_connection",
+        "src.connections.models.create_connection",
     ) as mock_create_connector:
         response = client.post("/connections/appstore", json=item.model_dump())
         assert mock_create_connector.called is False

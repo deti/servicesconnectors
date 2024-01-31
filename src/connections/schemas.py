@@ -1,4 +1,4 @@
-""" Schemas for connectors. """
+""" Schemas for connections. """
 
 from typing import Dict
 

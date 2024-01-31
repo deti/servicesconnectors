@@ -1,4 +1,4 @@
-""" Utils for connectors """
+""" Utils for connections """
 
 import hashlib
 import json

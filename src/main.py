@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 
-from src.connectors.api import router as connectors_router
+from src.connections.api import router as connectors_router
 
 app = FastAPI()
 

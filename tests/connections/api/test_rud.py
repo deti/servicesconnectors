@@ -3,8 +3,8 @@ from unittest.mock import ANY, patch
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from src.connectors.models import Connection
-from tests.connectors.fakes import fake_connector
+from src.connections.models import Connection
+from tests.connections.fakes import fake_connector
 
 
 def add_fake_connector(db: Session) -> Connection:
@@ -57,7 +57,7 @@ def test_get_connector_returns_204_when_not_fetched_yet(
 def test_get_connector_returns_200_when_fetched(client: TestClient, db: Session):
     connector = add_fake_connector(db)
 
-    with patch("src.connectors.api.rud.Storage") as mock_storage:
+    with patch("src.connections.api.rud.Storage") as mock_storage:
         mock_storage().read.return_value = {"test": "test"}
         response = client.get(f"/connections/{connector.uuid}")
         mock_storage().read.assert_called_once_with(connector.uuid)
@@ -74,11 +74,11 @@ def test_delete_connector_returns_404_when_not_found(client: TestClient, db: Ses
 
 def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Session):
     with (
-        patch("src.connectors.api.rud.get_connection") as mock_get_connector,
+        patch("src.connections.api.rud.get_connection") as mock_get_connector,
         patch(
-            "src.connectors.api.rud.delete_connection_from_db"
+            "src.connections.api.rud.delete_connection_from_db"
         ) as mock_delete_connector_from_db,
-        patch("src.connectors.api.rud.Storage") as mock_storage,
+        patch("src.connections.api.rud.Storage") as mock_storage,
     ):
         mock_get_connector.return_value = True
         response = client.delete("/connections/test-uuid")
@@ -92,7 +92,7 @@ def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Sessi
 
 
 def test_update_connector_returns_404_when_not_found(client: TestClient, db: Session):
-    with patch("src.connectors.api.rud.get_connection") as mock_get_connector:
+    with patch("src.connections.api.rud.get_connection") as mock_get_connector:
         mock_get_connector.return_value = None
         response = client.put("/connections/test-uuid")
         mock_get_connector.assert_called_once_with(ANY, "test-uuid")
@@ -104,8 +104,8 @@ def test_update_connector_returns_200_when_updated(client: TestClient, db: Sessi
     connector = fake_connector()
 
     with (
-        patch("src.connectors.api.rud.get_connection") as mock_get_connector,
-        patch("src.connectors.api.rud.run_connector") as mock_run_connector,
+        patch("src.connections.api.rud.get_connection") as mock_get_connector,
+        patch("src.connections.api.rud.run_connector") as mock_run_connector,
     ):
         mock_get_connector.return_value = connector
         response = client.put(f"/connections/{connector.uuid}")

@@ -1,4 +1,4 @@
-from src.connectors.utils import generate_uuid_from_dict
+from src.connections.utils import generate_uuid_from_dict
 
 
 def test_generate_uuid_from_dict():

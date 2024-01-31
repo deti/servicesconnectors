@@ -1,8 +1,8 @@
 """ Connector runner """
 
-from src.connectors.connectors.appstore import AppstoreConnector
-from src.connectors.models import Connection
-from src.connectors.storage import Storage
+from src.connections.connectors.appstore import AppstoreConnector
+from src.connections.models import Connection
+from src.connections.storage import Storage
 
 
 class RunnerException(Exception):

@@ -2,7 +2,7 @@ import json
 
 from faker import Faker
 
-from src.connectors.models import Connection
+from src.connections.models import Connection
 
 fake = Faker()
 

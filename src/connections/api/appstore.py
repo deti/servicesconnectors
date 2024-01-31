@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from src.connectors.models import get_or_create_connection
-from src.connectors.schemas import ConnectorCreate
+from src.connections.models import get_or_create_connection
+from src.connections.schemas import ConnectorCreate
 from src.dependencies import get_db
 
 router = APIRouter()

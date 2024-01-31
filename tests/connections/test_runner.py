@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 import pytest
 
-from src.connectors.runner import RunnerException, run_connector
-from tests.connectors.fakes import fake_connector
+from src.connections.runner import RunnerException, run_connector
+from tests.connections.fakes import fake_connector
 
 
 def test_run_connector_raises_on_unknown_connector():
@@ -24,8 +24,8 @@ def test_run_connector_executes_appsotre_connector():
     expected_data = {"test": "test"}
 
     with (
-        patch("src.connectors.runner.Storage") as mock_storage,
-        patch("src.connectors.runner.AppstoreConnector") as mock_appstore_connector,
+        patch("src.connections.runner.Storage") as mock_storage,
+        patch("src.connections.runner.AppstoreConnector") as mock_appstore_connector,
     ):
         mock_storage().write.return_value = None
         mock_appstore_connector().read_source.return_value = expected_data

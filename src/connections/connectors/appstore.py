@@ -8,7 +8,7 @@ import httpx
 from bs4 import BeautifulSoup
 from dataclasses_json import DataClassJsonMixin
 
-from src.connectors.models import Connection as ConnectorModel
+from src.connections.models import Connection as ConnectorModel
 
 
 def get_element_text(

@@ -3,13 +3,13 @@ import json
 from faker import Faker
 from sqlalchemy.orm import Session
 
-from src.connectors.models import (create_connection,
+from src.connections.models import (create_connection,
                                    delete_connection_from_db,
                                    get_all_connections, get_connection,
                                    get_or_create_connection)
-from src.connectors.schemas import ConnectorCreate
-from src.connectors.utils import generate_uuid_from_dict
-from tests.connectors.fakes import fake_appstore_settings, fake_connector
+from src.connections.schemas import ConnectorCreate
+from src.connections.utils import generate_uuid_from_dict
+from tests.connections.fakes import fake_appstore_settings, fake_connector
 
 fake = Faker()
 

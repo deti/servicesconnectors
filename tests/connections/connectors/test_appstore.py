@@ -5,8 +5,8 @@ import pytest
 import respx
 from httpx import Response
 
-from src.connectors.connectors.appstore import AppstoreConnector
-from tests.connectors.fakes import fake_connector
+from src.connections.connectors.appstore import AppstoreConnector
+from tests.connections.fakes import fake_connector
 
 
 @respx.mock
@@ -55,10 +55,10 @@ def test_200_response_returns_appstore_item():
 
     with (
         patch(
-            "src.connectors.connectors.appstore.get_element_text"
+            "src.connections.connectors.appstore.get_element_text"
         ) as mock_get_element_text,
         patch(
-            "src.connectors.connectors.appstore.get_all_element_text"
+            "src.connections.connectors.appstore.get_all_element_text"
         ) as mock_get_all_element_text,
     ):
         mock_get_element_text.return_value = "mocked text"

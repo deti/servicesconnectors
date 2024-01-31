@@ -7,7 +7,7 @@ STORAGE_PATH = Path(__file__).parent.parent.parent / "storage"
 
 
 class Storage:
-    """Storage interface for connectors"""
+    """Storage interface for connections"""
 
     def __init__(self):
         if not STORAGE_PATH.exists():

@@ -38,7 +38,7 @@ def get_connection(db: Session, connector_uuid: str) -> Optional[Connection]:
 
 
 def get_all_connections(db: Session) -> Sequence[Connection]:
-    """Get all connectors uuids from Database"""
+    """Get all connections uuids from Database"""
     return db.query(Connection).all()
 
 
