@@ -7,7 +7,10 @@ import httpx
 from bs4 import BeautifulSoup
 from dataclasses_json import DataClassJsonMixin
 
-from .abstractconnector import Connector
+from .connector import Connector, ConnectorException
+
+class AppStoreConnectorException(ConnectorException):
+    """Base exception for Appstore connectors"""
 
 
 def get_element_text(
@@ -60,7 +63,7 @@ class AppstoreConnector(Connector):
         with httpx.Client() as client:
             response = client.get(url)
             if response.status_code != 200:
-                raise Exception("Resource not found")
+                raise AppStoreConnectorException(f"Error: {response.status_code}", self.settings)
 
         soup = BeautifulSoup(response.text, "html.parser")
 

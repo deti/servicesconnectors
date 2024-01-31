@@ -5,8 +5,8 @@ import pytest
 import respx
 from httpx import Response
 
-from src.connections.connectors.abstractconnector import Connector
-from src.connections.connectors.appstore import AppstoreConnector
+from src.connections.connectors.connector import Connector
+from src.connections.connectors.appstore import AppstoreConnector, AppStoreConnectorException
 from tests.connections.fakes import fake_connection
 
 
@@ -35,7 +35,7 @@ def test_non_200_response_raises_exception():
         return_value=Response(404)
     )
 
-    with pytest.raises(Exception):
+    with pytest.raises(AppStoreConnectorException):
         connector.read_source()
 
     assert app_route.called

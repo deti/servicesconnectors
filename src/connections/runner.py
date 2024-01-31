@@ -2,9 +2,8 @@
 
 from typing import Optional, Type  # noqa: F401
 
-from src.connections.connectors.abstractconnector import \
-    Connector  # noqa: F401
 from src.connections.connectors.appstore import AppstoreConnector
+from src.connections.connectors.connector import Connector  # noqa: F401
 from src.connections.connectors.googleplay import GooglePlayConnector
 from src.connections.models import Connection
 from src.connections.storage import Storage

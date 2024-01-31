@@ -1,4 +1,4 @@
-from src.connections.connectors.abstractconnector import Connector
+from src.connections.connectors.connector import Connector
 from src.connections.connectors.googleplay import GooglePlayConnector
 from tests.connections.fakes import fake_connection
 

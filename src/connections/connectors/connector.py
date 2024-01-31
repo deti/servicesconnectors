@@ -5,6 +5,9 @@ from abc import abstractmethod
 
 from src.connections.models import Connection
 
+class ConnectorException(Exception):
+    """Base exception for connectors"""
+
 
 class Connector:
     """Base connector for data syncronization"""
