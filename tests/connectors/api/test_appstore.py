@@ -48,7 +48,7 @@ def test_create_appstore_missing_parameter_returns_422(
     as_dict = item.model_dump()
     as_dict[parameter] = None
 
-    response = client.post("/connectors/appstore", json=as_dict)
+    response = client.post("/connections/appstore", json=as_dict)
 
     assert response.status_code == 422
 
@@ -59,7 +59,7 @@ def test_create_appstore_returns_404_if_not_found(client: TestClient):
 
     app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(404))
 
-    response = client.post("/connectors/appstore", json=item.model_dump())
+    response = client.post("/connections/appstore", json=item.model_dump())
     assert app_route.called
 
     assert response.status_code == 404
@@ -74,7 +74,7 @@ def test_create_appstore_connector(client: TestClient, db: Session):
 
     app_route = respx.get(build_appstore_url(item)).mock(return_value=Response(200))
 
-    response = client.post("/connectors/appstore", json=item.model_dump())
+    response = client.post("/connections/appstore", json=item.model_dump())
     assert app_route.called
 
     connector = db.query(Connection).first()
@@ -112,7 +112,7 @@ def test_create_appstore_connector_do_not_create_duplicate(
     with mock.patch(
         "src.connectors.models.create_connection",
     ) as mock_create_connector:
-        response = client.post("/connectors/appstore", json=item.model_dump())
+        response = client.post("/connections/appstore", json=item.model_dump())
         assert mock_create_connector.called is False
     assert app_route.called
 

@@ -16,7 +16,7 @@ def add_fake_connector(db: Session) -> Connection:
 
 
 def test_get_all_connectors_uuids_gets_nothing(client: TestClient, db: Session):
-    response = client.get("/connectors")
+    response = client.get("/connections")
     assert response.status_code == 200
     assert response.json() == []
 
@@ -24,7 +24,7 @@ def test_get_all_connectors_uuids_gets_nothing(client: TestClient, db: Session):
 def test_get_all_connectors_uuids(client: TestClient, db: Session):
     connector = add_fake_connector(db)
 
-    response = client.get("/connectors")
+    response = client.get("/connections")
     assert response.status_code == 200
 
     assert response.json() == [
@@ -40,7 +40,7 @@ def test_get_all_connectors_uuids(client: TestClient, db: Session):
 
 
 def test_get_connector_returns_404_when_not_found(client: TestClient, db: Session):
-    response = client.get("/connectors/test-uuid")
+    response = client.get("/connections/test-uuid")
     assert response.status_code == 404
     assert response.json() == {"detail": "Connection not found"}
 
@@ -50,7 +50,7 @@ def test_get_connector_returns_204_when_not_fetched_yet(
 ):
     connector = add_fake_connector(db)
 
-    response = client.get(f"/connectors/{connector.uuid}")
+    response = client.get(f"/connections/{connector.uuid}")
     assert response.status_code == 204
 
 
@@ -59,7 +59,7 @@ def test_get_connector_returns_200_when_fetched(client: TestClient, db: Session)
 
     with patch("src.connectors.api.rud.Storage") as mock_storage:
         mock_storage().read.return_value = {"test": "test"}
-        response = client.get(f"/connectors/{connector.uuid}")
+        response = client.get(f"/connections/{connector.uuid}")
         mock_storage().read.assert_called_once_with(connector.uuid)
 
     assert response.status_code == 200
@@ -67,7 +67,7 @@ def test_get_connector_returns_200_when_fetched(client: TestClient, db: Session)
 
 
 def test_delete_connector_returns_404_when_not_found(client: TestClient, db: Session):
-    response = client.delete("/connectors/test-uuid")
+    response = client.delete("/connections/test-uuid")
     assert response.status_code == 404
     assert response.json() == {"detail": "Connection not found"}
 
@@ -81,7 +81,7 @@ def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Sessi
         patch("src.connectors.api.rud.Storage") as mock_storage,
     ):
         mock_get_connector.return_value = True
-        response = client.delete("/connectors/test-uuid")
+        response = client.delete("/connections/test-uuid")
 
         mock_get_connector.assert_called_once_with(ANY, "test-uuid")
         mock_delete_connector_from_db.assert_called_once_with(ANY, "test-uuid")
@@ -94,7 +94,7 @@ def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Sessi
 def test_update_connector_returns_404_when_not_found(client: TestClient, db: Session):
     with patch("src.connectors.api.rud.get_connection") as mock_get_connector:
         mock_get_connector.return_value = None
-        response = client.put("/connectors/test-uuid")
+        response = client.put("/connections/test-uuid")
         mock_get_connector.assert_called_once_with(ANY, "test-uuid")
     assert response.status_code == 404
     assert response.json() == {"detail": "Connection not found"}
@@ -108,7 +108,7 @@ def test_update_connector_returns_200_when_updated(client: TestClient, db: Sessi
         patch("src.connectors.api.rud.run_connector") as mock_run_connector,
     ):
         mock_get_connector.return_value = connector
-        response = client.put(f"/connectors/{connector.uuid}")
+        response = client.put(f"/connections/{connector.uuid}")
 
         mock_get_connector.assert_called_once_with(ANY, connector.uuid)
         mock_run_connector.assert_called_once_with(connector)

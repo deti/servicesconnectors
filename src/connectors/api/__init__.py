@@ -6,8 +6,8 @@ from .appstore import router as appstore_router
 from .rud import router as rud_router
 
 router = APIRouter(
-    prefix="/connectors",
-    tags=["connectors"],
+    prefix="/connections",
+    tags=["connections"],
     responses={404: {"description": "Not found"}},
 )
 
