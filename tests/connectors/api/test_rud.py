@@ -74,9 +74,9 @@ def test_delete_connector_returns_404_when_not_found(client: TestClient, db: Ses
 
 def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Session):
     with (
-        patch("src.connectors.api.rud.get_connector") as mock_get_connector,
+        patch("src.connectors.api.rud.get_connection") as mock_get_connector,
         patch(
-            "src.connectors.api.rud.delete_connector_from_db"
+            "src.connectors.api.rud.delete_connection_from_db"
         ) as mock_delete_connector_from_db,
         patch("src.connectors.api.rud.Storage") as mock_storage,
     ):
@@ -92,7 +92,7 @@ def test_delete_connector_returns_200_when_deleted(client: TestClient, db: Sessi
 
 
 def test_update_connector_returns_404_when_not_found(client: TestClient, db: Session):
-    with patch("src.connectors.api.rud.get_connector") as mock_get_connector:
+    with patch("src.connectors.api.rud.get_connection") as mock_get_connector:
         mock_get_connector.return_value = None
         response = client.put("/connectors/test-uuid")
         mock_get_connector.assert_called_once_with(ANY, "test-uuid")
@@ -104,7 +104,7 @@ def test_update_connector_returns_200_when_updated(client: TestClient, db: Sessi
     connector = fake_connector()
 
     with (
-        patch("src.connectors.api.rud.get_connector") as mock_get_connector,
+        patch("src.connectors.api.rud.get_connection") as mock_get_connector,
         patch("src.connectors.api.rud.run_connector") as mock_run_connector,
     ):
         mock_get_connector.return_value = connector

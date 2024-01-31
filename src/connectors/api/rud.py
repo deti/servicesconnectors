@@ -3,8 +3,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.connectors.models import (delete_connector_from_db,
-                                   get_all_connectors, get_connector)
+from src.connectors.models import (delete_connection_from_db,
+                                   get_all_connections, get_connection)
 from src.connectors.runner import run_connector
 from src.connectors.storage import Storage
 from src.dependencies import get_db
@@ -15,7 +15,7 @@ router = APIRouter()
 @router.get("/")
 def get_all_connectors_configuration(db: Session = Depends(get_db)):
     """Get all connectors"""
-    return get_all_connectors(db)
+    return get_all_connections(db)
 
 
 @router.get(
@@ -37,7 +37,7 @@ async def read_connector_data(uuid: str, db: Session = Depends(get_db)):
     """Read a connector data"""
 
     # verify that resource exists in database
-    connector = get_connector(db, uuid)
+    connector = get_connection(db, uuid)
 
     if connector is None:
         raise HTTPException(
@@ -56,13 +56,13 @@ async def read_connector_data(uuid: str, db: Session = Depends(get_db)):
 async def delete_connector(uuid: str, db: Session = Depends(get_db)):
     """Delete a connector"""
     # verify that resource exists in database
-    connector = get_connector(db, uuid)
+    connector = get_connection(db, uuid)
     if connector is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Connector not found"
         )
 
-    delete_connector_from_db(db, uuid)
+    delete_connection_from_db(db, uuid)
     storage = Storage()
     storage.delete(uuid)
     return {"message": f"Deleted {uuid}"}
@@ -72,7 +72,7 @@ async def delete_connector(uuid: str, db: Session = Depends(get_db)):
 async def update_connector_data(uuid: str, db: Session = Depends(get_db)):
     """Update a connector data"""
     # verify that resource exists in database
-    connector = get_connector(db, uuid)
+    connector = get_connection(db, uuid)
     if connector is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Connector not found"

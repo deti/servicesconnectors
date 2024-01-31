@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from src.connectors.models import get_or_create_connector
+from src.connectors.models import get_or_create_connection
 from src.connectors.schemas import ConnectorCreate
 from src.dependencies import get_db
 
@@ -50,7 +50,7 @@ async def create_appstore_connector(item: AppStoreItem, db: Session = Depends(ge
         },
         description=item.description,
     )
-    connector = get_or_create_connector(db, connector_create)
+    connector = get_or_create_connection(db, connector_create)
 
     return {
         "type": "appstore",

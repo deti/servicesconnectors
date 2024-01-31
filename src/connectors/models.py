@@ -32,17 +32,17 @@ class Connection(Base):  # type: ignore
     )
 
 
-def get_connector(db: Session, connector_uuid: str) -> Optional[Connection]:
+def get_connection(db: Session, connector_uuid: str) -> Optional[Connection]:
     """Get a connector by uuid from Database"""
     return db.query(Connection).filter(Connection.uuid == connector_uuid).first()
 
 
-def get_all_connectors(db: Session) -> Sequence[Connection]:
+def get_all_connections(db: Session) -> Sequence[Connection]:
     """Get all connectors uuids from Database"""
     return db.query(Connection).all()
 
 
-def create_connector(
+def create_connection(
     db: Session, connector_info: ConnectorCreate, connector_uuid: Optional[str] = None
 ) -> Connection:
     """Create a connector in Database"""
@@ -61,18 +61,20 @@ def create_connector(
     return connector
 
 
-def get_or_create_connector(db: Session, connector_info: ConnectorCreate) -> Connection:
+def get_or_create_connection(
+    db: Session, connector_info: ConnectorCreate
+) -> Connection:
     """Get or create a connector in Database"""
     item_uuid = generate_uuid_from_dict(connector_info.settings)
-    connector = get_connector(db, item_uuid)
+    connector = get_connection(db, item_uuid)
     if connector:
         return connector
-    return create_connector(db, connector_info, item_uuid)
+    return create_connection(db, connector_info, item_uuid)
 
 
-def delete_connector_from_db(db: Session, connector_uuid: str) -> None:
+def delete_connection_from_db(db: Session, connector_uuid: str) -> None:
     """Delete a connector in Database"""
-    connector = get_connector(db, connector_uuid)
+    connector = get_connection(db, connector_uuid)
     if connector:
         db.delete(connector)
         db.commit()
