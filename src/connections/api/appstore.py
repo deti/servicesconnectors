@@ -27,8 +27,9 @@ def build_appstore_url(item: AppStoreConnectionItem) -> str:
 
 
 @router.post("/appstore")
-async def create_appstore_connection(item: AppStoreConnectionItem,
-                                     db: Session = Depends(get_db)):
+async def create_appstore_connection(
+    item: AppStoreConnectionItem, db: Session = Depends(get_db)
+):
     """Create an AppStore connection"""
 
     # verify that resource exists

@@ -7,7 +7,8 @@ from fastapi.testclient import TestClient
 from httpx import Response
 from sqlalchemy.orm import Session
 
-from src.connections.api.appstore import AppStoreConnectionItem, build_appstore_url
+from src.connections.api.appstore import (AppStoreConnectionItem,
+                                          build_appstore_url)
 from src.connections.models import Connection, create_connection
 from src.connections.schemas import ConnectionCreate
 

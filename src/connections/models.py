@@ -43,7 +43,9 @@ def get_all_connections(db: Session) -> Sequence[Connection]:
 
 
 def create_connection(
-    db: Session, connection_create: ConnectionCreate, connection_uuid: Optional[str] = None
+    db: Session,
+    connection_create: ConnectionCreate,
+    connection_uuid: Optional[str] = None,
 ) -> Connection:
     """Create a connection in Database"""
     if connection_uuid is None:
