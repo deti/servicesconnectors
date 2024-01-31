@@ -6,14 +6,14 @@ import respx
 from httpx import Response
 
 from src.connections.connectors.appstore import AppstoreConnector
-from tests.connections.fakes import fake_connector
+from tests.connections.fakes import fake_connection
 
 
 @respx.mock
 def test_non_200_response_raises_exception():
     """Test non 200 response raises exception"""
 
-    connector_model = fake_connector()
+    connector_model = fake_connection()
     settings = json.loads(connector_model.settings)
     appstore_connector = AppstoreConnector(connector_model)
 
@@ -36,7 +36,7 @@ def test_non_200_response_raises_exception():
 def test_200_response_returns_appstore_item():
     """Test 200 response returns appstore item"""
 
-    connector_model = fake_connector()
+    connector_model = fake_connection()
     settings = json.loads(connector_model.settings)
     appstore_connector = AppstoreConnector(connector_model)
 

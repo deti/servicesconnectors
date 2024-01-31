@@ -4,12 +4,12 @@ from faker import Faker
 from sqlalchemy.orm import Session
 
 from src.connections.models import (create_connection,
-                                   delete_connection_from_db,
-                                   get_all_connections, get_connection,
-                                   get_or_create_connection)
+                                    delete_connection_from_db,
+                                    get_all_connections, get_connection,
+                                    get_or_create_connection)
 from src.connections.schemas import ConnectionCreate
 from src.connections.utils import generate_uuid_from_dict
-from tests.connections.fakes import fake_appstore_settings, fake_connector
+from tests.connections.fakes import fake_appstore_settings, fake_connection
 
 fake = Faker()
 
@@ -20,7 +20,7 @@ def test_get_connector_returns_none_when_non_exsited(db: Session):
 
 
 def test_get_connector_returns_connector_when_exsited(db: Session):
-    connector = fake_connector()
+    connector = fake_connection()
     db.add(connector)
     db.commit()
     db.refresh(connector)
@@ -74,7 +74,9 @@ def test_all_connectors_uuids_returns_empty_list_when_no_connector(db: Session):
 
 
 def test_get_all_connectors_returns_all_connectrs(db: Session):
-    expected_uuids = [create_connection(db, fake_connection_create()) for _ in range(10)]
+    expected_uuids = [
+        create_connection(db, fake_connection_create()) for _ in range(10)
+    ]
     assert set(get_all_connections(db)) == set(expected_uuids)
 
 

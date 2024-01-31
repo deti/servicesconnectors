@@ -4,11 +4,11 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from src.connections.models import Connection
-from tests.connections.fakes import fake_connector
+from tests.connections.fakes import fake_connection
 
 
 def add_fake_connector(db: Session) -> Connection:
-    connector = fake_connector()
+    connector = fake_connection()
     db.add(connector)
     db.commit()
     db.refresh(connector)
@@ -101,7 +101,7 @@ def test_update_connector_returns_404_when_not_found(client: TestClient, db: Ses
 
 
 def test_update_connector_returns_200_when_updated(client: TestClient, db: Session):
-    connector = fake_connector()
+    connector = fake_connection()
 
     with (
         patch("src.connections.api.rud.get_connection") as mock_get_connector,

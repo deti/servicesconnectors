@@ -15,7 +15,7 @@ def fake_appstore_settings() -> dict:
     }
 
 
-def fake_connector() -> Connection:
+def fake_connection() -> Connection:
     settings = fake_appstore_settings()
     return Connection(
         uuid=fake.uuid4(),

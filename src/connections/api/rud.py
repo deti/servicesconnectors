@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from src.connections.models import (delete_connection_from_db,
-                                   get_all_connections, get_connection)
+                                    get_all_connections, get_connection)
 from src.connections.runner import run_connector
 from src.connections.storage import Storage
 from src.dependencies import get_db

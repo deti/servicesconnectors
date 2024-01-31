@@ -3,12 +3,12 @@ from unittest.mock import patch
 import pytest
 
 from src.connections.runner import RunnerException, run_connector
-from tests.connections.fakes import fake_connector
+from tests.connections.fakes import fake_connection
 
 
 def test_run_connector_raises_on_unknown_connector():
     """Test run connector raises on unknown connector"""
-    connector = fake_connector()
+    connector = fake_connection()
     connector.type = "unknown"
 
     with pytest.raises(RunnerException) as excinfo:
@@ -18,7 +18,7 @@ def test_run_connector_raises_on_unknown_connector():
 
 def test_run_connector_executes_appsotre_connector():
     """Test run connector executes appstore connector"""
-    connector = fake_connector()
+    connector = fake_connection()
     connector.type = "appstore"
 
     expected_data = {"test": "test"}
