@@ -12,8 +12,8 @@ from src.dependencies import get_db
 router = APIRouter()
 
 
-class AppStoreItem(BaseModel):
-    """AppStore input paramters"""
+class AppStoreConnectionItem(BaseModel):
+    """AppStore connections creation input paramters"""
 
     region: str = Field(title="region", description="Region of the app")
     slug: str = Field(title="slug", description="Slug of the app")
@@ -21,14 +21,15 @@ class AppStoreItem(BaseModel):
     description: str = Field(description="Description of the item", max_length=100)
 
 
-def build_appstore_url(item: AppStoreItem) -> str:
+def build_appstore_url(item: AppStoreConnectionItem) -> str:
     """Build an AppStore application URL"""
     return f"https://apps.apple.com/{item.region}/app/{item.slug}/{item.appid}"
 
 
 @router.post("/appstore")
-async def create_appstore_connector(item: AppStoreItem, db: Session = Depends(get_db)):
-    """Create an AppStore connector"""
+async def create_appstore_connection(item: AppStoreConnectionItem,
+                                     db: Session = Depends(get_db)):
+    """Create an AppStore connection"""
 
     # verify that resource exists
     url = build_appstore_url(item)
@@ -40,7 +41,7 @@ async def create_appstore_connector(item: AppStoreItem, db: Session = Depends(ge
                 status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found"
             )
 
-    connector_create = ConnectionCreate(
+    connection_create = ConnectionCreate(
         type="appstore",
         settings={
             "type": "appstore",
@@ -50,10 +51,10 @@ async def create_appstore_connector(item: AppStoreItem, db: Session = Depends(ge
         },
         description=item.description,
     )
-    connector = get_or_create_connection(db, connector_create)
+    connection = get_or_create_connection(db, connection_create)
 
     return {
         "type": "appstore",
         "message": f"Created '{item.description}'",
-        "uuid": connector.uuid,
+        "uuid": connection.uuid,
     }

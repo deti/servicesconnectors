@@ -7,15 +7,15 @@ from fastapi.testclient import TestClient
 from httpx import Response
 from sqlalchemy.orm import Session
 
-from src.connections.api.appstore import AppStoreItem, build_appstore_url
+from src.connections.api.appstore import AppStoreConnectionItem, build_appstore_url
 from src.connections.models import Connection, create_connection
 from src.connections.schemas import ConnectionCreate
 
 fake = Faker()
 
 
-def fake_appstore_item() -> AppStoreItem:
-    return AppStoreItem(
+def fake_appstore_item() -> AppStoreConnectionItem:
+    return AppStoreConnectionItem(
         region=fake.country_code().lower(),
         slug=fake.slug(),
         appid=f"id{fake.random_int()}",
