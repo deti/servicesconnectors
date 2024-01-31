@@ -1,6 +1,32 @@
 # 3rd party services connectors
 Connect and operate 3rd party services from your application.
 
+## Project layout
+```bash
+├── src                     # sources
+│   ├── alembic             # Database migrations
+│   ├── connections         
+│   │   ├── api             # API
+│   │   │   └── ...         # API implemntation
+│   │   ├── connectors      # Connetors
+│   │   │   └── ...         # Connectors implementations
+│   │   ├── models          # Database models for connections
+│   │   ├── runner          # Connectors runner
+│   │   └── storage         # Storage abstraction
+│   ├── database            # Database confiugration
+│   └── main                # Application entry point
+├── tests                   # Automated tests
+├── lint.sh                 # Lint project script
+├── requirements*           # Requirements files for pip-tools
+├── run_server.sh           # Run application script
+├── setup_project.sh        # Project setup script
+├── test.sh                 # Run tests script
+├── test_api.http           # API test requests
+└── update_dependencies.sh  # Update dependencies script
+
+
+```
+
 ## Project configuration
 ```bash
 ./setup_project.sh
